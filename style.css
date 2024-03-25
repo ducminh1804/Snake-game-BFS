@@ -1,0 +1,10 @@
+#wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+*{
+    background-color: #222738;
+}
