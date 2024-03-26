@@ -26,6 +26,7 @@ class Snake {
         this.grid_size = grid_size;
     }
     draw(ctx) {
+        ctx.beginPath();
         ctx.rect(this.xpos, this.ypos, this.grid_size, this.grid_size);
         ctx.fillStyle = "#87FF00";
         ctx.fill();
@@ -33,7 +34,7 @@ class Snake {
 }
 
 // 
-var direction;
+var direction = "";
 let s = new Snake(40, 20, 20);
 s.draw(ctx);
 
@@ -45,45 +46,62 @@ document.onkeydown = function (e) {
     } else {
         keyCode = e.keyCode;
     }
-    // console.log(keyCode);
-
     switch (keyCode) {
         case 37:
-            keyCode = 37
-            s.xpos -= s.grid_size;
-            s.draw(ctx);
-            console.log("left");
+            direction = "left";
             break;
         case 38:
-            s.ypos -= s.grid_size;
-            s.draw(ctx);
-            console.log("up");
-
+            direction = "up";
             break;
         case 39:
-            s.xpos += s.grid_size;
-            s.draw(ctx);
-            console.log("right");
-
+            direction = "right";
             break;
         case 40:
-            s.ypos += s.grid_size;
-            s.draw(ctx);
-            console.log("down");
-
+            direction = "down";
             break;
         default:
             break;
     }
 }
 
+const moveToDirection = function () {
+    switch (direction) {
+        case "up":
+            if (s.ypos <= 0) {
+                s.ypos = 600;
+            }
+            s.ypos -= s.grid_size;
+            break;
+        case "down":
+            if (s.ypos >= canvas.height - 20) {
+                s.ypos = -20;
+            }
+            s.ypos += s.grid_size;
+            break;
+        case "right":
+            if (s.xpos >= canvas.width - 20) {
+                s.xpos = -20;
+            }
+            s.xpos += s.grid_size;
+            break;
+        case "left":
+            if (s.xpos <= 0) {
+                s.xpos = 600;
+            }
+            s.xpos -= s.grid_size;
+            break;
+        default:
+            break;
+    }
+    ctx.clearRect(0, 0, 600, 600);
+    s.draw(ctx);
+}
 
-// const update = function () {
-//     s.xpos += s.grid_size;
-//     s.draw(ctx);
-// }
+setInterval(() => {
+    moveToDirection();
+}, 200);
 
 
-// setInterval(() => {
-//     update()
-// }, 500);
+console.log(s.xpos)
+console.log(s.ypos)
+
