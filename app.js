@@ -3,7 +3,8 @@ const ctx = canvas.getContext("2d");
 
 
 const grid_size = 20;
-
+let snakeBody = [];
+let arr_food = [];
 for (let i = 1; i < 30; i++) {
     ctx.beginPath();
     ctx.moveTo(i * grid_size, 0);
@@ -20,22 +21,30 @@ for (let i = 1; i < 30; i++) {
     ctx.stroke();
 }
 class Snake {
-    constructor(xpos, ypos, grid_size) {
+    constructor(xpos, ypos) {
         this.xpos = xpos;
         this.ypos = ypos;
-        this.grid_size = grid_size;
+        this.grid_size = 20;
     }
     draw(ctx) {
+        snakeBody.push([this.xpos, this.ypos]);
+        if (snakeBody.length > 2) {
+            var itemRemove = snakeBody.shift();//tra ve gia tri vua dc xoa'
+            ctx.clearRect(itemRemove[0], itemRemove[1], this.grid_size, this.grid_size);
+        }
+
         ctx.beginPath();
         ctx.rect(this.xpos, this.ypos, this.grid_size, this.grid_size);
         ctx.fillStyle = "#87FF00";
         ctx.fill();
+
+
     }
 }
 
 // 
 var direction = "";
-let s = new Snake(40, 20, 20);
+let s = new Snake(40, 20);
 s.draw(ctx);
 
 
@@ -93,15 +102,34 @@ const moveToDirection = function () {
         default:
             break;
     }
-    ctx.clearRect(0, 0, 600, 600);
     s.draw(ctx);
 }
 
+
+
+//hàm tạo 1 điểm thức ăn => tránh trường hợp thức ăn trùng với ô nằm trong thân rắn
+const makeFood = function () {
+    let x_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+    let y_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+
+    if (snakeBody.some(function (item) {
+        return item[0] == x_food && item[1] == y_food;
+    })) {
+        makeFood();
+    } else {
+        ctx.beginPath();
+        ctx.rect(x_food * grid_size, y_food * grid_size, grid_size, grid_size);
+        ctx.fillStyle = "white";
+        ctx.fill()
+    }
+}
+
+
+makeFood()
+
+
+
+
 setInterval(() => {
     moveToDirection();
-}, 200);
-
-
-console.log(s.xpos)
-console.log(s.ypos)
-
+}, 100);
