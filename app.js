@@ -105,30 +105,41 @@ let s = new Snake(x * grid_size, y * grid_size);
 s.draw(ctx);
 
 
-document.onkeydown = function (e) {
-    let keyCode;
-    if (e == null) {
-        keyCode = window.e.keyCode;
-    } else {
-        keyCode = e.keyCode;
-    }
-    switch (keyCode) {
-        case 37:
-            direction = "left";
+
+
+//nếu muốn so sánh hướng mới và hướng cũ 
+// => cho hướng cũ vào biến temp và so sánh thoyy
+document.addEventListener("keydown", function (event) {
+    let newDirection;
+
+    switch (event.key) {
+        case "ArrowLeft":
+            newDirection = "left";
             break;
-        case 38:
-            direction = "up";
+        case "ArrowUp":
+            newDirection = "up";
             break;
-        case 39:
-            direction = "right";
+        case "ArrowRight":
+            newDirection = "right";
             break;
-        case 40:
-            direction = "down";
+        case "ArrowDown":
+            newDirection = "down";
             break;
         default:
             break;
     }
-}
+
+    //ban đầu sẽ cập nhật được hướng direction
+  if (
+        (newDirection === "left" && direction !== "right") ||
+        (newDirection === "right" && direction !== "left") ||
+        (newDirection === "up" && direction !== "down") ||
+        (newDirection === "down" && direction !== "up")
+    ) {
+        direction = newDirection;
+    }
+});
+
 
 const moveToDirection = function () {
     switch (direction) {
@@ -175,19 +186,10 @@ btn__load.addEventListener("click", function (e) {
 
 const control_direction = function () {
     document.addEventListener("keydown", function (event) {
-        // Kiểm tra xem phím nào được nhấ
         let keyCode = event.key;
 
-        switch (keyCode) {
-            case 37:
-                if (direction == "right") {
-                    event.preventDefault();
-                }
-                break;
+        console.log(keyCode + "  " + direction);
 
-            default:
-                break;
-        }
     });
 
 }
