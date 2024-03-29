@@ -16,11 +16,27 @@
 
         <div id="info">
             <h1>Score : <span class="score">0</span></h1>
-            <button id="btn__load">Restart</button>
+            <label for="level">Level</label>
+            <select id="level">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+
+
+            <input id="speed" type="range" min="50" max="200" step="50">
+            <label for="speed">Speed</label>
+
+          
+            <button id="btn__load">Start</button>
+
+
         </div>
     </div>
 </body>
 <script src="app.js"></script>
-<script src="test.js"></script>
 
 </html>

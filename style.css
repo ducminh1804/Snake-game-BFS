@@ -5,12 +5,14 @@
     align-items: center;
 }
 
-*{
+* {
     background-color: #222738;
 }
 
 #info {
     color: white;
+    display: flex;
+    flex-direction: column;
 }
 
 button {
@@ -18,4 +20,27 @@ button {
     border-radius: 10px;
     padding: 20px;
     font-size: 2em;
+}
+
+label {
+    font-size: 2em;
+}
+
+#level {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: white;
+    font-size: 2em;
+}
+
+#speed {
+    margin-top: 20px;
+}
+#speed+label {
+    margin-bottom: 30px;
+}
+
+i{
+    color: white;
+    z-index: 1;
 }
