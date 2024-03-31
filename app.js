@@ -50,6 +50,7 @@ const makeFood = function () {
 }
 
 
+
 const eatFood = function () {
     let head = snakeBody[snakeBody.length - 1];
 
@@ -57,7 +58,7 @@ const eatFood = function () {
         snake_length += 1;
         point++;
         score.innerHTML = point;
-        makeFood();
+        makeFood_by_lv();
         // snakeBody.push([x_food,y_food]);
     }
 }
@@ -123,11 +124,28 @@ const suicide_lv_2 = function () {
         gameOver()
     }
 }
+
 function suicide_by_lv() {
     if (cur_lv == "1") {
         suicide();
     } else if (cur_lv == "2") {
         suicide_lv_2();
+    }
+    else if (cur_lv == "3") {
+        suicide_lv_2();
+    }
+}
+
+function makeFood_by_lv() {
+    if (cur_lv == "1") {
+        makeFood();
+    } else if (cur_lv == "2") {
+        makeFood();
+    }
+    else if (cur_lv == "3") {
+        x_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+        y_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+        makeFood_lv_3();
     }
 }
 
@@ -264,21 +282,30 @@ function moveToDirection_lv2() {
 // -------------------------------------------------------------------------------------------------------------------------------------
 //level 3
 //make a fodd escape
-function food_escape() {
-    console.log(x_food + " " + y_food);
 
-    switch (direction) {
-        case "up":
-            x_food -= grid_size;
+
+
+let f_direction = "";
+
+// setInterval(() => {
+//     update_food_direction()
+//     console.log(f_direction);
+// }, 1000);
+
+function update_food_direction() {
+    let temp = Math.floor(Math.random() * 4) + 1;
+    switch (temp) {
+        case 1:
+            f_direction = "left";
             break;
-        case "down":
-            x_food += grid_size
+        case 2:
+            f_direction = "up";
             break;
-        case "right":
-            y_food += grid_size
+        case 3:
+            f_direction = "right";
             break;
-        case "left":
-            y_food -= grid_size;
+        case 4:
+            f_direction = "down";
             break;
         default:
             break;
@@ -286,8 +313,75 @@ function food_escape() {
 }
 
 
+function update_food_position() {
+    switch (f_direction) {
+        case "up":
+            if (y_food > 0) {
+                y_food--;
+            }
+            break;
+        case "down":
+            if (y_food < canvas.width / grid_size) {
+                y_food++;
+            }
+            break;
+        case "left":
+            if (x_food > 0) {
+                x_food--;
+            }
+            break;
+        case "right":
+            if (x_food < canvas.width / grid_size) {
+                x_food++;
+            }
+            break;
+        default:
+            break;
+    }
+}
 
-//
+
+let food_body = [];
+function draw_new_food() {
+    if (snakeBody.some(function (item) {
+        return item[0] == x_food * grid_size && item[1] == y_food * grid_size;
+    })) {
+        // Nếu có, gọi lại hàm draw_new_food() để tạo mồi mới khác
+        draw_new_food();
+    }
+    else {
+        food_body.push([x_food, y_food]);
+        ctx.beginPath();
+        ctx.rect(x_food * grid_size, y_food * grid_size, grid_size, grid_size);
+        ctx.fillStyle = "red";
+        ctx.fill();
+    }
+
+    if (food_body.length > 1) {
+        var foodRemove = food_body.shift(); // Lấy vị trí thức ăn cũ từ mảng food_body
+        ctx.clearRect(foodRemove[0] * grid_size, foodRemove[1] * grid_size, grid_size, grid_size);
+    }
+}
+
+// draw_new_food()
+const makeFood_lv_3 = setInterval(() => {
+    console.log('---------------------------')
+    // makeFood();
+    update_food_direction();
+    update_food_position();
+    draw_new_food();
+    // console.log(f_direction);
+    // console.log("x_food = " + x_food)
+    // console.log("y_food = " + y_food)
+    // console.log('---------------------------')
+}, 1000);
+
+
+// -------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+// khoi tao game
 x = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
 y = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
 let s = new Snake(x * grid_size, y * grid_size);
@@ -304,6 +398,6 @@ let interval = setInterval(() => {
     }
 
     if (cur_lv == "3") {
-        food_escape();
+        moveToDirection_lv2();
     }
 }, 100);
