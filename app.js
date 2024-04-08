@@ -5,7 +5,8 @@ const score = document.querySelector('.score');
 const grid_size = 20;
 const lv = document.querySelector('#level');
 
-
+var arr_hori = [];
+var arr_ver = [];
 let snakeBody = [];
 let arr_food = [];
 let snake_length = 2;
@@ -59,7 +60,6 @@ const eatFood = function () {
         point++;
         score.innerHTML = point;
         makeFood_by_lv();
-        // snakeBody.push([x_food,y_food]);
     }
 }
 
@@ -79,7 +79,7 @@ const suicide = function () {
 
 
 
-
+// --------------------------------------------------------------------------------------------------------------------------
 // main
 
 makeFood();
@@ -133,6 +133,8 @@ function suicide_by_lv() {
     }
     else if (cur_lv == "3") {
         suicide_lv_2();
+    } else if (cur_lv == "4") {
+        suicide_lv_4();
     }
 }
 
@@ -143,6 +145,11 @@ function makeFood_by_lv() {
         makeFood();
     }
     else if (cur_lv == "3") {
+        x_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+        y_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+        makeFood_lv_3();
+    }
+    else if (cur_lv == "4") {
         x_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
         y_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
         makeFood_lv_3();
@@ -243,13 +250,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
 });
 
 
-
-
-
-// let interval = setInterval(() => {
-//     moveToDirection();
-// }, 50);
-
 function gameOver() {
     clearInterval(interval);
     alert('game over');
@@ -349,6 +349,22 @@ function draw_new_food() {
         // Nếu có, gọi lại hàm draw_new_food() để tạo mồi mới khác
         draw_new_food();
     }
+
+    arr_hori.forEach(element => {
+        if(x_food == element[0] && y_food == element[1]) {
+            draw_new_food();
+        }
+    });
+
+    arr_ver.forEach(element => {
+        if(x_food == element[0] && y_food == element[1]) {
+            draw_new_food();
+        }
+    });
+
+    if (x_food <= 0 || y_food <= 0 || x_food >= canvas.width || y_food >= canvas.width) {
+        draw_new_food();
+    }
     else {
         food_body.push([x_food, y_food]);
         ctx.beginPath();
@@ -363,23 +379,111 @@ function draw_new_food() {
     }
 }
 
-// draw_new_food()
-const makeFood_lv_3 = setInterval(() => {
-    console.log('---------------------------')
-    // makeFood();
-    update_food_direction();
-    update_food_position();
-    draw_new_food();
-    // console.log(f_direction);
-    // console.log("x_food = " + x_food)
-    // console.log("y_food = " + y_food)
-    // console.log('---------------------------')
-}, 1000);
+console.log(arr_hori);
+console.log(x_food)
+
+function makeFood_lv_3() {
+    setInterval(() => {
+        update_food_direction();
+        update_food_position();
+        draw_new_food();
+    }, 1000);
+}
+
+// -- lv4-----------------------------------------------------------------------------------------------------------------------------------
+
+function draw_horizontal() {
+    g = grid_size;
+    i = 0;
+    while (i <= 10) {
+        arr_hori.push([Math.floor(Math.random() * 29), Math.floor(Math.random() * 29)]);
+        i++;
+    }
+    arr_hori.forEach((element) => {
+        x = element[0];
+        y = element[1];
+        ctx.beginPath();
+        ctx.rect(x * g, y * g, 5 * g, g);
+        ctx.fillStyle = "blue";
+        ctx.fill();
+    });
+
+    let k = 1;
+    arr_hori.forEach(element => {
+        for (let n = 0; n < 4; n++) {
+            arr_hori.push([element[0] + k, element[1]]);
+            k++;
+        }
+        k = 1;
+    });
+
+}
+
+function draw_vertital() {
+    g = grid_size;
+    i = 0;
+    while (i <= 10) {
+        arr_ver.push([Math.floor(Math.random() * 29), Math.floor(Math.random() * 29)]);
+        i++;
+    }
+    arr_ver.forEach((element) => {
+        x = element[0];
+        y = element[1];
+        ctx.beginPath();
+        ctx.rect(x * g, y * g, g, 5 * g);
+        ctx.fillStyle = "blue";
+        ctx.fill();
+    });
+
+    let k = 1;
+    arr_ver.forEach(element => {
+        for (let n = 0; n < 4; n++) {
+            arr_hori.push([element[0], element[1] + k]);
+            k++;
+        }
+        k = 1;
+    });
+
+}
 
 
-// -------------------------------------------------------------------------------------------------------------------------------------
 
+if (cur_lv == "4") {
+    draw_horizontal();
+    draw_vertital();
+}
 
+function suicide_lv_4() {
+    let head = snakeBody[snakeBody.length - 1];
+
+    arr_hori.forEach(element => {
+        if (head[0] == element[0] * grid_size && head[1] == element[1] * grid_size) {
+            gameOver();
+        }
+    });
+
+    arr_ver.forEach(element => {
+        if (head[0] == element[0] * grid_size && head[1] == element[1] * grid_size) {
+            gameOver();
+        }
+    });
+
+    for (let i = 0; i < snakeBody.length - 2; i++) {
+        item = snakeBody[i];
+        if (head[0] == item[0] && head[1] == item[1]) {
+            gameOver();
+        }
+    }
+}
+// console.log(arr_hori);
+
+// ----------------------------------------------------------------------------------------------------------------------------------------
+
+// const test = setInterval(()=>{
+//     let head = snakeBody[snakeBody.length - 1];
+//     console.log(arr_hori);
+//     console.log(head)
+// },1000)
 
 // khoi tao game
 x = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
@@ -400,4 +504,8 @@ let interval = setInterval(() => {
     if (cur_lv == "3") {
         moveToDirection_lv2();
     }
+    if (cur_lv == "4") {
+        moveToDirection();
+    }
+
 }, 100);
