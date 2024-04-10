@@ -9,6 +9,10 @@
 </head>
 
 <body>
+    <div id="time__bar--wrapper">
+        <canvas id="time__bar" width="600" height="20"
+            style="border: 1px solid white; background-color:white;"></canvas>
+    </div>
     <div id="wrapper">
         <canvas id="canvas" width="600" height="600"
             style="border: 1px solid white; background-color: #181825;"></canvas>
@@ -30,13 +34,14 @@
             <input id="speed" type="range" min="50" max="200" step="50">
             <label for="speed">Speed</label>
 
-          
+
             <button id="btn__load">Start</button>
-
-
         </div>
     </div>
+
+
 </body>
 <script src="app.js"></script>
 <script src="test.js"></script>
+
 </html>

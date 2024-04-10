@@ -4,6 +4,8 @@ const btn__load = document.querySelector('#btn__load');
 const score = document.querySelector('.score');
 const grid_size = 20;
 const lv = document.querySelector('#level');
+const time__bar = document.querySelector('#time__bar');
+const ctx_bar = time__bar.getContext("2d");
 
 var arr_hori = [];
 var arr_ver = [];
@@ -11,7 +13,9 @@ let snakeBody = [];
 let arr_food = [];
 let snake_length = 2;
 var direction = "";
-
+let time = 20;
+let k = time;
+let cell = 600 / time;
 for (let i = 1; i < 30; i++) {
     ctx.beginPath();
     ctx.moveTo(i * grid_size, 0);
@@ -58,9 +62,12 @@ const eatFood = function () {
     if (head[0] == x_food * grid_size && head[1] == y_food * grid_size) {
         snake_length += 1;
         point++;
+        k+=2;
         score.innerHTML = point;
         makeFood_by_lv();
+        plus_time();
     }
+    console.log(k)
 }
 
 
@@ -351,13 +358,13 @@ function draw_new_food() {
     }
 
     arr_hori.forEach(element => {
-        if(x_food == element[0] && y_food == element[1]) {
+        if (x_food == element[0] && y_food == element[1]) {
             draw_new_food();
         }
     });
 
     arr_ver.forEach(element => {
-        if(x_food == element[0] && y_food == element[1]) {
+        if (x_food == element[0] && y_food == element[1]) {
             draw_new_food();
         }
     });
@@ -477,13 +484,39 @@ function suicide_lv_4() {
 }
 // console.log(arr_hori);
 
-// ----------------------------------------------------------------------------------------------------------------------------------------
+// --time bar--------------------------------------------------------------------------------------------------------------------------------------
 
-// const test = setInterval(()=>{
-//     let head = snakeBody[snakeBody.length - 1];
-//     console.log(arr_hori);
-//     console.log(head)
-// },1000)
+let intervalId;
+
+function time_out() {
+    ctx_bar.beginPath();
+    ctx_bar.rect(0, 0, 600, 20);
+    ctx_bar.fillStyle = "red";
+    ctx_bar.fill();
+    ctx_bar.closePath();
+    // let k = time;
+    intervalId = setInterval(() => {
+        if (k < 0) {
+            clearInterval(intervalId);
+            gameOver();
+            return;
+        }
+        ctx_bar.clearRect(k * cell, 0, cell, 20);
+        k--;
+        console.log(point)
+    }, 1000);
+}
+
+time_out();
+
+// -plus time----------------------------
+function plus_time() {
+    
+}
+
+
+
+// end time bar--------------------------------------------------------------------------------------------------------------------------------------
 
 // khoi tao game
 x = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;

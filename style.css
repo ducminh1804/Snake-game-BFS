@@ -44,3 +44,11 @@ i{
     color: white;
     z-index: 1;
 }
+
+#time__bar--wrapper {
+}
+
+#time__bar {
+    margin-left: 192px;
+    /* width: 600px; */
+}
