@@ -13,9 +13,143 @@ let snakeBody = [];
 let arr_food = [];
 let snake_length = 2;
 var direction = "";
-let time = 20;
+let time = 200000;
 let k = time;
 let cell = 600 / time;
+
+// ============================================================================================================================================
+// =============================================================================================================================================================
+// =============================================================================================================================================================
+// =============================================================================================================================================================
+// =============================================================================================================================================================
+// =============================================================================================================================================================
+class Node {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.visited = false;
+        this.prev = null;
+    }
+}
+var R, C;
+var grid = [];
+var re = [];
+
+function init_grid(matrix) {
+    for (let i = 0; i < matrix.length; i++) {
+        grid[i] = [];
+        for (let j = 0; j < matrix.length; j++) {
+            if (matrix[i][j] !== 0) {
+                grid[i][j] = new Node(i, j);
+            }
+            else {
+                grid[i][j] = null;
+            }
+        }
+    }
+    return grid;
+}
+
+function getNeibor(node) {
+    let list_nei = [];
+    let dx = [-1, +1, 0, 0];
+    let dy = [0, 0, -1, +1];
+
+    for (let i = 0; i < 4; i++) {
+        let neibor_x = node.x + dx[i];
+        let neibor_y = node.y + dy[i];
+        if (neibor_x >= R || neibor_y >= C || neibor_x < 0 || neibor_y < 0) continue;
+        if (grid[neibor_x][neibor_y] == null) continue;
+        let new_node = new Node(neibor_x, neibor_y);
+        list_nei.push(new_node);
+    }
+    return list_nei;
+}
+
+function bfs(x, y) {
+    let queue = [];
+    queue.push(grid[x][y]);
+    grid[x][y].visited = true;
+    while (queue.length !== 0) {
+        let cur = queue.shift();
+        re.push(cur);
+        let list_nei = getNeibor(cur);
+        if (list_nei.length !== 0) {
+            list_nei.forEach(e => {
+                grid[e.x][e.y];
+                if (grid[e.x][e.y].visited == false) {
+                    grid[e.x][e.y].prev = cur;
+                    grid[e.x][e.y].visited = true;
+                    queue.push(grid[e.x][e.y]);
+                }
+            });
+        }
+    }
+    return re;
+}
+
+function findPath(x1, y1, x2, y2) {
+    bfs(x1, y1);
+    let cur = grid[x2][y2];
+    let path = [];
+    while (cur.prev !== null) {
+        path.push(cur);
+        cur = cur.prev
+    }
+    path.push(grid[x1][y1]);
+    return path.reverse();
+}
+//làm việc với biến toàn cục mà chỉ xây dựng hàm thay đổi 1 cái biến cục bộ
+// ví dụ : cần xử lí load cái grid toàn cục
+// mà dùng hàm bfs(node) trả về các neibor xung quanh node nhập vào
+//nó chỉ thay đổi các node xung quanh đó chứ ko hề tác động gì tới các node trong grid hết***
+// test
+arr1 = [
+    [1, 1, 1, 0],
+    [1, 0, 1, 1],
+    [1, 1, 0, 1],
+    [0, 0, 0, 1]
+]
+var arr = [];
+
+R = arr1.length; C = R;
+grid = init_grid(arr1);
+// console.log(grid[2][0])
+// console.log(grid[0][0])
+// console.log(grid);
+// 
+console.log(grid)
+
+
+// =============================================================================================================================================================
+// =============================================================================================================================================================
+
+
+
+class SnakeAI {
+    constructor(randX, randY) {
+        this.randX = randX;
+        this.randY = randY;
+        this.color = color;
+    }
+    draw(ctx) {
+        ctx.beginPath();
+        ctx.fillStyle = '#F0F8FF';
+        ctx.rect(this.randX * grid_size, this.randY * grid_size, grid_size, grid_size);
+        ctx.fill();
+    }
+}
+ctx.beginPath();
+ctx.fillStyle = 'pink';
+ctx.rect(20 * grid_size, 19 * grid_size, grid_size, grid_size);
+ctx.fill();
+// =============================================================================================================================================================
+// =============================================================================================================================================================
+// =============================================================================================================================================================
+// =============================================================================================================================================================
+// =============================================================================================================================================================
+// =============================================================================================================================================================
+
 for (let i = 1; i < 30; i++) {
     ctx.beginPath();
     ctx.moveTo(i * grid_size, 0);
@@ -33,7 +167,7 @@ for (let i = 1; i < 30; i++) {
 }
 
 let point = 0;
-let x_food, y_food;
+var x_food, y_food;
 const makeFood = function () {
     // Tạo một mồi mới ngẫu nhiên
     x_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
@@ -62,12 +196,12 @@ const eatFood = function () {
     if (head[0] == x_food * grid_size && head[1] == y_food * grid_size) {
         snake_length += 1;
         point++;
-        k+=2;
+        k += 3;
         score.innerHTML = point;
         makeFood_by_lv();
         plus_time();
     }
-    console.log(k)
+    // console.log("k= " + k)
 }
 
 
@@ -259,6 +393,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 function gameOver() {
     clearInterval(interval);
+    clearInterval(intervalId);
     alert('game over');
 }
 
@@ -386,15 +521,14 @@ function draw_new_food() {
     }
 }
 
-console.log(arr_hori);
-console.log(x_food)
+
 
 function makeFood_lv_3() {
     setInterval(() => {
         update_food_direction();
         update_food_position();
         draw_new_food();
-    }, 1000);
+    }, 1500);
 }
 
 // -- lv4-----------------------------------------------------------------------------------------------------------------------------------
@@ -445,7 +579,7 @@ function draw_vertital() {
     let k = 1;
     arr_ver.forEach(element => {
         for (let n = 0; n < 4; n++) {
-            arr_hori.push([element[0], element[1] + k]);
+            arr_ver.push([element[0], element[1] + k]);
             k++;
         }
         k = 1;
@@ -503,7 +637,7 @@ function time_out() {
         }
         ctx_bar.clearRect(k * cell, 0, cell, 20);
         k--;
-        console.log(point)
+        // console.log("point " + point)
     }, 1000);
 }
 
@@ -511,7 +645,11 @@ time_out();
 
 // -plus time----------------------------
 function plus_time() {
-    
+    ctx_bar.beginPath();
+    ctx_bar.rect((k - 3) * cell, 0, cell * 3, 20);
+    ctx_bar.fillStyle = 'red';
+    ctx_bar.fill();
+    ctx.closePath();
 }
 
 
@@ -519,8 +657,8 @@ function plus_time() {
 // end time bar--------------------------------------------------------------------------------------------------------------------------------------
 
 // khoi tao game
-x = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
-y = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+var x = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+var y = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
 let s = new Snake(x * grid_size, y * grid_size);
 s.draw(ctx);
 
@@ -542,3 +680,61 @@ let interval = setInterval(() => {
     }
 
 }, 100);
+
+
+
+// ------------------------test-----------------
+function randPos() {
+    var randX = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+    var randY = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+    if (randX == x || randY == y || randX == x_food || randY == y_food) {
+        randPos();
+    }
+    // arr_hori.forEach(element => {
+    //     if (element[0] == randX) {
+    //         randPos();
+    //     }
+    // });
+
+    // arr_ver.forEach(element => {
+    //     if (element[1] == randY) {
+    //         randPos();
+    //     }
+    // });
+    return [randX, randY]
+}
+// 
+function init_arr() {
+    let arr = [];
+    for (let i = 0; i < 30; i++) {
+        arr[i] = [];
+        for (let j = 0; j < 30; j++) {
+            arr[i][j] = new Node(i, j);
+            // arr[i][j] = '+';
+
+        }
+    }
+    for (let i = 0; i < arr_ver.length; i++) {
+        let e = arr_ver[i];
+        let x_ver = e[1];
+        let y_ver = e[0];
+        if (x_ver >= 30 || y_ver >= 30) continue;
+        arr[x_ver][y_ver] = null;
+        // arr[x_ver][y_ver] = '$';
+
+    }
+
+    for (let i = 0; i < arr_hori.length; i++) {
+        let e = arr_hori[i];
+        let x_ver = e[1];
+        let y_ver = e[0];
+        if (x_ver >= 30 || y_ver >= 30) continue;
+        arr[x_ver][y_ver] = null;
+        // arr[x_ver][y_ver] = '$';
+
+    }
+    return arr;
+}
+
+
+console.log(init_arr());
