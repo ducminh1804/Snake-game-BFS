@@ -757,7 +757,7 @@ function findPath(x1, y1, x2, y2) {
 
 
 
-// ---------------------------------------TEST---------------------------------------------------------
+// ---------------------------------------TEST-----------------------------------------------------------------------------------------------------------
 grid = init_arr();
 R = grid.length; C = R;
 
@@ -815,32 +815,28 @@ function moveAlongPath(path) {
         snakeAI.y = cur.x;
         snakeAI.draw(ctx);
         count_path++;
-        console.log('///////////')
-        console.log("cur.x " + cur.x);
-        console.log("cur.y " + cur.y);
-        console.log(snakeAiBody)
-        console.log('///////////')
-
+        console.log('///////////');
+        console.log("head.x " + cur.x);
+        console.log("head.y " + cur.y);
+        snakeAiBody.forEach(element => {
+            console.log(element[0] + ' ' + element[1]);
+        });
+        console.log('///////////');
     }
 }
 
+// cap nhat head Snake
 function snakeAiMove() {
     let head = snakeAiBody[snakeAiBody.length - 1];
     let x = head[1];
     let y = head[0];
-    // let cur = snakeAiBody.pop();
-    // let x = cur[1];
-    // let y = cur[0];
+    //thay x = y_food cu~, y = x_food cu~
     let path = findPath(x, y, y_food, x_food);
-
-    // console.log(x+'  '+y)
     moveAlongPath(path);
-    // console.log(x + ' ' + y)
-    // console.log(path);
 }
 
 // snakeAiMove()
-var interval_snake_com = setInterval(snakeAiMove, 1000)
+var interval_snake_com = setInterval(snakeAiMove, 10)
 // console.log(findPath(0, 0, y_food, x_food));
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // console.log(findPath(0, 0, 23, 22));
