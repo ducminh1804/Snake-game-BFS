@@ -6,6 +6,8 @@ const grid_size = 20;
 const lv = document.querySelector('#level');
 const time__bar = document.querySelector('#time__bar');
 const ctx_bar = time__bar.getContext("2d");
+const sp = document.querySelector('#speed')
+
 
 var arr_hori = [];
 var arr_ver = [];
@@ -13,9 +15,40 @@ let snakeBody = [];
 let arr_food = [];
 let snake_length = 1;
 var direction = "";
-let time = 200000;
+let time = 30;
 let k = time;
 let cell = 600 / time;
+let x_food_old, y_food_old;
+var speed;
+var speedAi;
+var path = [];
+
+//luu speed vao local
+sp.addEventListener('change', () => {
+    let speed = sp.value;
+    console.log(speed);
+    // window.localStorage.clear();
+    localStorage.removeItem('speed');
+    localStorage.setItem('speed', speed);
+})
+
+var cur_sp = window.localStorage.getItem('speed');
+
+function load_speed() {
+    sp.value = cur_sp;
+}
+
+if (cur_sp == 100) {
+    speed = 1000;
+    speedAi = 1100;
+} else if (cur_sp == 500) {
+    speed = 500;
+    speedAi = 600;
+} else {
+    speed = 100
+    speedAi = 150;
+}
+
 
 for (let i = 1; i < 30; i++) {
     ctx.beginPath();
@@ -33,53 +66,32 @@ for (let i = 1; i < 30; i++) {
     ctx.stroke();
 }
 
-let point = 0;
+var point = 0;
+let pointAi = 0;
 var x_food, y_food;
-// const makeFood = function () {
-//     // Tạo một mồi mới ngẫu nhiên
-//     x_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
-//     y_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
-
-//     // Kiểm tra xem mồi mới có nằm trong thân rắn hay không
-//     if (snakeBody.some(function (item) {
-//         return item[0] == x_food * grid_size && item[1] == y_food * grid_size;
-//     })) {
-//         // Nếu có, gọi lại hàm makeFood() để tạo mồi mới khác
-//         makeFood();
-//     } else {
-//         // Nếu không, vẽ mồi mới lên canvas
-//         ctx.beginPath();
-//         ctx.rect(x_food * grid_size, y_food * grid_size, grid_size, grid_size);
-//         ctx.fillStyle = "white";
-//         ctx.fill();
-//     }
-// }
-
-
-
-
-
 // =============================================================================================================================================================
 // =============================================================================================================================================================
 // =============================================================================================================================================================
 const makeFood = function () {
-    // Tạo một mồi mới ngẫu nhiên
+
     x_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
     y_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
 
-    // Kiểm tra xem mồi mới có nằm trong thân rắn hay không
+    if (x_food <= 0 || y_food <= 0 || x_food >= canvas.width / grid_size || y_food >= canvas.width / grid_size) {
+        makeFood();
+    }
+    // kiem tra moi trong body ran' ko
     if (snakeBody.some(function (item) {
         return item[0] == x_food * grid_size && item[1] == y_food * grid_size;
     })) {
-        // Nếu có, gọi lại hàm makeFood() để tạo mồi mới khác
         makeFood();
     } else {
-        // Kiểm tra xem mồi mới có nằm trong tường không
+        // kiem tra co nam trong tuong` ko
         if (isFoodInWall(x_food, y_food)) {
-            // Nếu có, gọi lại hàm makeFood() để tạo mồi mới khác
+
             makeFood();
         } else {
-            // Nếu không, vẽ mồi mới lên canvas
+            // vex moi moi
             ctx.beginPath();
             ctx.rect(x_food * grid_size, y_food * grid_size, grid_size, grid_size);
             ctx.fillStyle = "white";
@@ -87,6 +99,35 @@ const makeFood = function () {
         }
     }
 }
+
+//make food for AI
+const makeFoodAi = function () {
+    // Tạo một mồi mới ngẫu nhiên
+    x_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+    y_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+
+
+    if (x_food <= 0 || y_food <= 0 || x_food >= canvas.width / grid_size || y_food >= canvas.width / grid_size) {
+        makeFoodAi();
+    }
+
+    if (isFoodInWall(x_food, y_food)) {
+
+        makeFoodAi();
+    }
+    // kiem tra moi` co trong tuong` hay body ko
+    if (snakeAiBody.some(function (item) {
+        return item[0] == x_food && item[1] == y_food;
+    }) || grid[y_food][x_food] == null) {
+        makeFoodAi();
+    } else {
+        ctx.beginPath();
+        ctx.rect(x_food * grid_size, y_food * grid_size, grid_size, grid_size);
+        ctx.fillStyle = "red";
+        ctx.fill();
+    }
+}
+//
 
 // Hàm kiểm tra xem mồi mới có nằm trong tường không
 const isFoodInWall = function (x_food, y_food) {
@@ -126,8 +167,17 @@ const eatFood = function () {
         score.innerHTML = point;
         makeFood_by_lv();
         plus_time();
+        //reset lai snake AI 
+        count_path = 1;
+        for (let i = 0; i < grid.length; i++) {
+            for (let j = 0; j < grid.length; j++) {
+                if (grid[i][j]) {
+                    grid[i][j].visited = false;
+                    grid[i][j].prev = null;
+                }
+            }
+        }
     }
-    // console.log("k= " + k)
 }
 
 
@@ -141,11 +191,6 @@ const suicide = function () {
         }
     }
 }
-
-
-
-
-
 // --------------------------------------------------------------------------------------------------------------------------
 // main
 
@@ -164,16 +209,13 @@ class Snake {
         }
         eatFood();
         suicide_by_lv()
-
         ctx.beginPath();
         ctx.rect(this.xpos, this.ypos, this.grid_size, this.grid_size);
         ctx.fillStyle = "#87FF00";
         ctx.fill();
+        // console.log(s.xpos + " " + s.ypos)
     }
 }
-
-// 
-
 
 //cach 1: truyen doi tuong snake vao function(snake) va` dung snake.xpos
 //cach 2: goi thang doi tuong s.xpos
@@ -185,8 +227,6 @@ const suicide_lv_2 = function () {
             gameOver();
         }
     }
-    // console.log(s.xpos + "  " + s.ypos)
-
     if (s.xpos < 0 || s.ypos < 0 || s.xpos > canvas.width || s.ypos > canvas.width) {
         gameOver()
     }
@@ -302,11 +342,16 @@ const moveToDirection = function () {
 
 
 
+
+
+
+
 //luu lv vao local
 const op = document.querySelectorAll('option');
 lv.addEventListener('change', (e) => {
     let level = lv.value;
-    window.localStorage.clear();
+    // window.localStorage.clear();
+    localStorage.removeItem('level');
     localStorage.setItem('level', level);
 })
 
@@ -324,15 +369,12 @@ function load_lv() {
 
 
 document.addEventListener("DOMContentLoaded", function (event) {
-    load_lv()
+    load_lv();
+    load_speed();
 });
 
 
-function gameOver() {
-    clearInterval(interval);
-    clearInterval(intervalId);
-    alert('game over');
-}
+
 
 // -------------------------------------------------------------------------------------------------------------------------------------
 //level 2
@@ -361,11 +403,7 @@ function moveToDirection_lv2() {
 // -------------------------------------------------------------------------------------------------------------------------------------
 //level 3
 //make a fodd escape
-
-
-
 let f_direction = "";
-
 // setInterval(() => {
 //     update_food_direction()
 //     console.log(f_direction);
@@ -553,7 +591,6 @@ function suicide_lv_4() {
         }
     }
 }
-// console.log(arr_hori);
 
 // --time bar--------------------------------------------------------------------------------------------------------------------------------------
 
@@ -578,7 +615,9 @@ function time_out() {
     }, 1000);
 }
 
-time_out();
+if (cur_lv == '3' || cur_lv == '4' || cur_lv == '5' || cur_lv == '6') {
+    time_out();
+}
 
 // -plus time----------------------------
 function plus_time() {
@@ -594,8 +633,33 @@ function plus_time() {
 // end time bar--------------------------------------------------------------------------------------------------------------------------------------
 
 // khoi tao game
-var x = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
-var y = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+var x, y;
+// Loop until we find a valid initial position for the snake
+do {
+    x = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+    y = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+} while (isInsideWall(x, y));
+
+// Now x and y are guaranteed to be within the canvas and not inside walls
+
+// Function to check if the position is inside the walls
+function isInsideWall(x, y) {
+    // Check if the position is within any horizontal or vertical walls
+    for (let i = 0; i < arr_hori.length; i++) {
+        if (x == arr_hori[i][0] && y == arr_hori[i][1]) {
+            return true;
+        }
+    }
+    for (let i = 0; i < arr_ver.length; i++) {
+        if (x == arr_ver[i][0] && y == arr_ver[i][1]) {
+            return true;
+        }
+    }
+    // Check if the position is within the canvas boundaries
+    return x <= 0 || y <= 0 || x >= canvas.width / grid_size || y >= canvas.width / grid_size;
+}
+
+// Now x and y are guaranteed to be within the canvas and not inside walls
 // khoi tao lai vi tri con ran khi no nam trong tuong`
 let s = new Snake(x * grid_size, y * grid_size);
 s.draw(ctx);
@@ -623,32 +687,7 @@ let interval = setInterval(() => {
         moveToDirection();
     }
 
-}, 100);
-
-
-
-// ------------------------test-----------------
-function randPos() {
-    var randX = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
-    var randY = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
-    if (randX == x || randY == y || randX == x_food || randY == y_food) {
-        randPos();
-    }
-    // arr_hori.forEach(element => {
-    //     if (element[0] == randX) {
-    //         randPos();
-    //     }
-    // });
-
-    // arr_ver.forEach(element => {
-    //     if (element[1] == randY) {
-    //         randPos();
-    //     }
-    // });
-    return [randX, randY]
-}
-// 
-
+}, speed);
 
 // ============================================================================================================================================
 // =============================================================================================================================================================
@@ -740,8 +779,9 @@ function bfs(x, y) {
 }
 
 function findPath(x1, y1, x2, y2) {
+
     if (grid[x2][y2] == null) {
-        console.log("ko co duong di");
+        console.log('ko co duong di')
         return;
     }
     bfs(x1, y1);
@@ -758,20 +798,19 @@ function findPath(x1, y1, x2, y2) {
 
 
 // ---------------------------------------TEST-----------------------------------------------------------------------------------------------------------
-grid = init_arr();
-R = grid.length; C = R;
 
-console.log(grid)
-// console.log(grid[0][0])
-// console.log(findPath(0, 0, 10,10))
+grid = init_arr();
+var tempGrid = init_arr();
+R = grid.length; C = R;
 
 // =============================================================================================================================================================
 // =============================================================================================================================================================
 // =============================================================================================================================================================
 // ================================================================================ SNAKE AI=============================================================================
 var snake_length_ai = 1;
-var count_path = 1;//nho update cho count ==1 khi thuc hien buoc di moi
+var count_path = 0;//nho update cho count ==1 khi thuc hien buoc di moi
 var snakeAiBody = [];
+var route = [];
 
 class SnakeAI {
     constructor(x, y) {
@@ -780,31 +819,98 @@ class SnakeAI {
     }
     draw(ctx) {
         snakeAiBody.push([this.x, this.y]);
+        if (snake_length_ai > 1) {
+            this.addSnakeToGrid();
+        }
         if (snakeAiBody.length > snake_length_ai) {
             let itemRemove = snakeAiBody.shift();//tra ve gia tri vua dc xoa'
             ctx.clearRect(itemRemove[0] * grid_size, itemRemove[1] * grid_size, grid_size, grid_size);
+            this.removeGrid(itemRemove[0], itemRemove[1]);
         }
-        this.eatFood();
+        this.eatFoodAi();
 
+        // this.updateGrid();
         ctx.beginPath();
         ctx.rect(this.x * grid_size, this.y * grid_size, grid_size, grid_size);
         ctx.fillStyle = "pink";
         ctx.fill();
-        // console.log(snakeAiBody)
     }
 
-    eatFood() {
+    eatFoodAi() {
         let head = snakeAiBody[snakeAiBody.length - 1];
         if (head[0] == x_food && head[1] == y_food) {
+
+            point--;
+            score.innerHTML = point;
+
             snake_length_ai += 1;
-            makeFood();
-            count_path = 1;
+            count_path = 0;
+            makeFoodAi();
+            while (grid[y_food][x_food] == null) {
+                makeFoodAi();
+            }
+            for (let i = 0; i < grid.length; i++) {
+                for (let j = 0; j < grid.length; j++) {
+                    if (grid[i][j]) {
+                        grid[i][j].visited = false;
+                        grid[i][j].prev = null;
+                    }
+                }
+            }
         }
+    }
+
+    addSnakeToGrid() {
+        for (let i = 0; i < snakeAiBody.length - 1; i++) {
+            let cur = snakeAiBody[i];
+            let x = cur[0];
+            let y = cur[1];
+            grid[y][x] = null;
+        }
+    }
+
+    removeGrid(x, y) {
+        grid[y][x] = new Node(y, x);
     }
 }
 
+
+
 var snakeAI = new SnakeAI(0, 0);
-snakeAI.draw(ctx);
+//make lv 6
+if (cur_lv == '6') { snakeAI.draw(ctx); }
+
+// cap nhat head Snake
+function snakeAiMove() {
+    let head = snakeAiBody[snakeAiBody.length - 1];
+    let x = head[1];
+    let y = head[0];
+    // let path = [];
+    //thay x = y_food cu~, y = x_food cu~
+
+    path = findPath(x, y, y_food, x_food);
+    if (path.length == 1) {
+        snakeAiBody.forEach(e => {
+            ctx.clearRect(e[0] * grid_size, e[1] * grid_size, grid_size, grid_size);
+        });
+        snake_length_ai = 1;
+        snakeAiBody = [];
+        snakeAiBody.push([0, 0]); // hoặc vị trí khởi tạo ban đầu của con rắn
+        // Đặt lại lưới (grid) và chuẩn bị cho một lần chạy mới
+        grid = init_arr();
+        tempGrid = init_arr();
+        for (let i = 0; i < grid.length; i++) {
+            for (let j = 0; j < grid.length; j++) {
+                if (grid[i][j]) {
+                    grid[i][j].visited = false;
+                    grid[i][j].prev = null;
+                }
+            }
+        }
+        count_path = 0;
+    }
+    moveAlongPath(path);
+}
 
 //return count__path + set lai x,y cua Snake + ve~ lai Snake
 //dang gap loi o path => quay tro ve 0,0 sau khi an moi
@@ -815,51 +921,61 @@ function moveAlongPath(path) {
         snakeAI.y = cur.x;
         snakeAI.draw(ctx);
         count_path++;
-        console.log('///////////');
-        console.log("head.x " + cur.x);
-        console.log("head.y " + cur.y);
-        snakeAiBody.forEach(element => {
-            console.log(element[0] + ' ' + element[1]);
-        });
-        console.log('///////////');
     }
 }
 
-// cap nhat head Snake
-function snakeAiMove() {
-    let head = snakeAiBody[snakeAiBody.length - 1];
-    let x = head[1];
-    let y = head[0];
-    //thay x = y_food cu~, y = x_food cu~
-    let path = findPath(x, y, y_food, x_food);
-    moveAlongPath(path);
+var interval_snake_com = setInterval(snakeAiMove, speedAi);
+
+
+
+// =============================================================================================================================================================
+// hàm vẽ thân rắn liên tục để ko tạo ra hiệu ứng đứt đoạn thân rắn
+function update_body_snake() {
+    snakeBody.forEach(element => {
+        ctx.beginPath();
+        ctx.rect(element[0], element[1], grid_size, grid_size);
+        ctx.fillStyle = "#87FF00";
+        ctx.fill();
+    });
+
+    snakeAiBody.forEach(element => {
+        ctx.beginPath();
+        ctx.rect(element[0] * grid_size, element[1] * grid_size, grid_size, grid_size);
+        ctx.fillStyle = "pink";
+        ctx.fill();
+    });
+}
+var interval_update_body_snake = setInterval(() => {
+    update_body_snake();
+}, 1);
+
+
+
+//game over
+function gameOver() {
+    clearInterval(interval);
+    clearInterval(intervalId);
+    clearInterval(interval_snake_com);
+    clearInterval(interval_update_body_snake);
+    ctx.font = "60px Arial";
+    ctx.fillStyle = "red";
+    ctx.fillText("THUA ÒI", 200, 100);
+    ctx.fillText("CHƠI LẠI ĐI ^^", 140, 400);
 }
 
-// snakeAiMove()
-var interval_snake_com = setInterval(snakeAiMove, 10)
-// console.log(findPath(0, 0, y_food, x_food));
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// console.log(findPath(0, 0, 23, 22));
+function winGame() {
+    if (point == 10) {
+        // Tăng cấp độ hiện tại lên 1
+        cur_lv = (parseInt(cur_lv) + 1).toString();
+        // Lưu cấp độ mới vào localStorage
+        localStorage.setItem('level', cur_lv);
+        // Tải lại trang để bắt đầu màn chơi mới
+        window.location.reload();
+    }
+}
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// const eatFood = function () {
-//     let head = snakeBody[snakeBody.length - 1];
-
-//     if (head[0] == x_food * grid_size && head[1] == y_food * grid_size) {
-//         snake_length += 1;
-//         point++;
-//         k += 3;
-//         score.innerHTML = point;
-//         makeFood_by_lv();
-//         plus_time();
-//     }
-//     // console.log("k= " + k)
-// }
-
-
-// =============================================================================================================================================================
-// =============================================================================================================================================================
-// =============================================================================================================================================================
-// =============================================================================================================================================================
+intervalWinGame = setInterval(() => {
+    winGame();
+}, 1500)
 
