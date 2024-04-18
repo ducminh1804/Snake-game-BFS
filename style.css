@@ -1,71 +1,51 @@
-#wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-}
-
 * {
-    background-color: #222738;
-}
+  background-color: #222738; }
 
-#info {
+#wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center; }
+  #wrapper #info {
     color: white;
     display: flex;
-    flex-direction: column;
-}
-
-button {
-    color: white;
-    border-radius: 10px;
-    padding: 20px;
-    font-size: 2em;
-}
-
-label {
-    font-size: 2em;
-}
-
-#level {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    color: white;
-    font-size: 2em;
-}
-
-#speed {
-    margin-top: 20px;
-}
-
-#speed+label {
-    margin-bottom: 30px;
-}
+    flex-direction: column; }
+    #wrapper #info button {
+      color: white;
+      border-radius: 10px;
+      padding: 20px;
+      font-size: 2em; }
+    #wrapper #info label {
+      font-size: 2em; }
+    #wrapper #info #level {
+      margin-top: 10px;
+      margin-bottom: 20px;
+      color: white;
+      font-size: 2em; }
+    #wrapper #info #speed {
+      margin-top: 20px; }
+      #wrapper #info #speed + label {
+        margin-bottom: 30px; }
 
 i {
-    color: white;
-    z-index: 1;
-}
-
-#time__bar--wrapper {}
+  color: white;
+  z-index: 1; }
 
 #time__bar {
-    margin-left: 192px;
-    /* width: 600px; */
-}
+  margin-left: 192px;
+  /* width: 600px; */ }
 
 /* CSS cho popup */
 .popup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-}
-
-.popup-content {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999; }
+  .popup .popup-content {
     background-color: white;
     width: 50%;
     max-width: 500px;
@@ -73,16 +53,11 @@ i {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    position: relative;
-}
-
-.popup-content {
-    background-color: #222738;
-}
-
-.close {
+    position: relative; }
+    .popup .popup-content:hover {
+      background-color: #222738; }
+  .popup .close {
     position: absolute;
     top: 10px;
     right: 10px;
-    cursor: pointer;
-}
+    cursor: pointer; }
