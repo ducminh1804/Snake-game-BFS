@@ -1,3 +1,6 @@
+// 21130447 - Võ Đức Minh - 0383350673 - Thứ 2, Ca 1
+
+
 const canvas = document.querySelector("#canvas");
 const ctx = canvas.getContext("2d");
 const btn__load = document.querySelector('#btn__load');
@@ -7,6 +10,15 @@ const lv = document.querySelector('#level');
 const time__bar = document.querySelector('#time__bar');
 const ctx_bar = time__bar.getContext("2d");
 const sp = document.querySelector('#speed')
+
+document.getElementById("btn__popup").addEventListener("click", function () {
+    document.getElementById("popup").style.display = "block";
+});
+
+document.getElementsByClassName("close")[0].addEventListener("click", function () {
+    document.getElementById("popup").style.display = "none";
+});
+
 
 
 var arr_hori = [];

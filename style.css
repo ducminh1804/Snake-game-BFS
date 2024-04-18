@@ -36,19 +36,53 @@ label {
 #speed {
     margin-top: 20px;
 }
+
 #speed+label {
     margin-bottom: 30px;
 }
 
-i{
+i {
     color: white;
     z-index: 1;
 }
 
-#time__bar--wrapper {
-}
+#time__bar--wrapper {}
 
 #time__bar {
     margin-left: 192px;
     /* width: 600px; */
+}
+
+/* CSS cho popup */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+.popup-content {
+    background-color: white;
+    width: 50%;
+    max-width: 500px;
+    margin: 100px auto;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.popup-content {
+    background-color: #222738;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
 }
