@@ -17,7 +17,6 @@ var m3 = new Audio('../music/m3.mp3');
 var m4 = new Audio('../music/m4.mp3');
 
 var ranMusic = Math.floor(Math.random() * 4) + 1;
-console.log(ranMusic)
 switch (ranMusic) {
     case 1:
         m1.play();
@@ -974,20 +973,31 @@ var interval_snake_com = setInterval(snakeAiMove, speedAi);
 // =============================================================================================================================================================
 // hàm vẽ thân rắn liên tục để ko tạo ra hiệu ứng đứt đoạn thân rắn
 function update_body_snake() {
-    snakeBody.forEach(element => {
+    // Vẽ các phần của con rắn người chơi
+    let head = snakeBody[snakeBody.length - 1];
+
+    for (let i = 0; i < snakeBody.length - 1; i++) {
+        let element = snakeBody[i];
         ctx.beginPath();
         ctx.rect(element[0], element[1], grid_size, grid_size);
         ctx.fillStyle = "#87FF00";
         ctx.fill();
-    });
+    }
+    ctx.beginPath();
+    ctx.arc(head[0] + 10, head[1] + 10, 5, 0, 2 * Math.PI);
+    ctx.fillStyle = "black";
+    ctx.stroke();
 
-    snakeAiBody.forEach(element => {
+    // Vẽ các phần của con rắn AI
+    for (let i = 0; i < snakeAiBody.length; i++) {
+        let element = snakeAiBody[i];
         ctx.beginPath();
         ctx.rect(element[0] * grid_size, element[1] * grid_size, grid_size, grid_size);
         ctx.fillStyle = "pink";
         ctx.fill();
-    });
+    }
 }
+
 var interval_update_body_snake = setInterval(() => {
     update_body_snake();
 }, 1);
@@ -1021,4 +1031,3 @@ function winGame() {
 intervalWinGame = setInterval(() => {
     winGame();
 }, 1500)
-
