@@ -58,7 +58,7 @@ let snakeBody = [];
 let arr_food = [];
 let snake_length = 1;
 var direction = "";
-let time = 30;
+let time = 40;
 let k = time;
 let cell = 600 / time;
 let x_food_old, y_food_old;
@@ -1024,7 +1024,7 @@ function gameOver() {
 }
 
 function winGame() {
-    if (point == 10) {
+    if (point == 6) {
         // Tăng cấp độ hiện tại lên 1
         cur_lv = (parseInt(cur_lv) + 1).toString();
         // Lưu cấp độ mới vào localStorage
