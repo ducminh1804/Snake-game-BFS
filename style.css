@@ -46,7 +46,7 @@ i {
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 9999; }
   .popup .popup-content {
-    background-color: white;
+    background-color: #222738;
     width: 50%;
     max-width: 500px;
     margin: 100px auto;
@@ -54,8 +54,6 @@ i {
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     position: relative; }
-    .popup .popup-content:hover {
-      background-color: #222738; }
   .popup .close {
     position: absolute;
     top: 10px;

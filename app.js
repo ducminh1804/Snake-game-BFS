@@ -10,7 +10,32 @@ const lv = document.querySelector('#level');
 const time__bar = document.querySelector('#time__bar');
 const ctx_bar = time__bar.getContext("2d");
 const sp = document.querySelector('#speed')
+//bg  music
+var m1 = new Audio('../music/m1.mp3');
+var m2 = new Audio('../music/m2.mp3');
+var m3 = new Audio('../music/m3.mp3');
+var m4 = new Audio('../music/m4.mp3');
 
+var ranMusic = Math.floor(Math.random() * 4) + 1;
+console.log(ranMusic)
+switch (ranMusic) {
+    case 1:
+        m1.play();
+        break;
+    case 2:
+        m2.play();
+        break;
+    case 3:
+        m3.play();
+        break;
+    case 4:
+        m4.play();
+        break;
+    default:
+        break;
+}
+
+//
 document.getElementById("btn__popup").addEventListener("click", function () {
     document.getElementById("popup").style.display = "block";
 });
@@ -276,12 +301,16 @@ function makeFood_by_lv() {
     else if (cur_lv == "4") {
         x_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
         y_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
-        makeFood_lv_3();
-    }
-    else if (cur_lv == "5") {
         makeFood();
     }
+    else if (cur_lv == "5") {
+        x_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+        y_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+        makeFood_lv_3();
+    }
     else if (cur_lv == "6") {
+        x_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
+        y_food = Math.floor(Math.random() * (canvas.width / grid_size - 1)) + 1;
         makeFood();
     }
 }
@@ -512,10 +541,12 @@ function draw_new_food() {
 
 function makeFood_lv_3() {
     setInterval(() => {
-        update_food_direction();
+        setInterval(() => {
+            update_food_direction();
+        }, 250)
         update_food_position();
         draw_new_food();
-    }, 1500);
+    }, 500);
 }
 
 // -- lv4-----------------------------------------------------------------------------------------------------------------------------------
