@@ -44,6 +44,13 @@ document.getElementsByClassName("close")[0].addEventListener("click", function (
 });
 
 
+document.getElementById("btn__popup__help").addEventListener("click", function () {
+    document.getElementById("popup__help").style.display = "block";
+});
+
+document.getElementsByClassName("close__help")[0].addEventListener("click", function () {
+    document.getElementById("popup__help").style.display = "none";
+});
 
 var arr_hori = [];
 var arr_ver = [];

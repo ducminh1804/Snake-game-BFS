@@ -54,6 +54,64 @@
 
 
             <button id="btn__load">Start</button>
+
+
+            <div id="popup__help" class="popup__help">
+                <div class="popup-content__help">
+                    <span class="close__help">X</span>
+                    <h2>Cách điều khiển:</h2>
+                    <p>Dùng các phím mũi tên trên bàn phím để di chuyển 4 hướng (lên, xuống, trái phải).</p>
+                    <h2>Cách thắng:</h2>
+                    <p>Người chơi thực hiện điều khiển rắn tiến đến mồi, với mỗi lần ăn mồi sẽ được cộng 1 điểm. Đạt
+                        được điểm target (5 điểm) sẽ tự động chuyển màn.</p>
+                    <h2>Xử thua:</h2>
+                    <p>Rắn tự cắn vào bản thân hoặc đâm vào chướng ngại vật hoặc hết thời gian.</p>
+                    <h2>Người chơi có thể chọn:</h2>
+                    <ul>
+                        <li>3 mức độ tốc độ di chuyển của rắn.</li>
+                        <li>6 level:</li>
+                        <ol>
+                            <li>
+                                <p><strong>Level 1</strong></p>
+                                <p>Rắn có thể di chuyển tự do và đi xuyên qua tường để trở lại ở phía đối diện.</p>
+                            </li>
+                            <li>
+                                <p><strong>Level 2</strong></p>
+                                <p>Không gian di chuyển bị giới hạn bởi 4 bức tường xung quanh.</p>
+                            </li>
+                            <li>
+                                <p><strong>Level 3</strong></p>
+                                <p>Thời gian chơi sẽ là 20 giây.</p>
+                                <p>Không gian di chuyển bị giới hạn bởi 4 bức tường xung quanh.</p>
+                                <p>Mồi sẽ di chuyển liên tục, người chơi cần đuổi theo để ăn mồi.</p>
+                                <p>Mỗi khi mồi được ăn, thời gian sẽ được cộng thêm 2 giây.</p>
+                            </li>
+                            <li>
+                                <p><strong>Level 4</strong></p>
+                                <p>Thời gian chơi sẽ là 20 giây.</p>
+                                <p>Sẽ xuất hiện các chướng ngại, người chơi cần né trong quá trình săn mồi.</p>
+                            </li>
+                            <li>
+                                <p><strong>Level 5</strong></p>
+                                <p>Thời gian chơi sẽ là 20 giây.</p>
+                                <p>Mồi sẽ di chuyển liên tục, người chơi cần đuổi theo để ăn mồi.</p>
+                                <p>Mỗi khi mồi được ăn, thời gian sẽ được cộng thêm 2 giây.</p>
+                                <p>Sẽ xuất hiện các chướng ngại, người chơi cần né trong quá trình săn mồi.</p>
+                            </li>
+                            <li>
+                                <p><strong>Level 6</strong></p>
+                                <p>Thời gian chơi sẽ là 20 giây.</p>
+                                <p>Mỗi khi mồi được ăn, thời gian sẽ được cộng thêm 2 giây.</p>
+                                <p>Sẽ xuất hiện các chướng ngại, người chơi cần né trong quá trình săn mồi.</p>
+                                <p>Người chơi sẽ đua mồi cùng máy tính, rắn máy tính sẽ liên tục ăn mồi của bạn và mỗi
+                                    lần nó ăn được, nó sẽ giảm điểm của bạn đi 1. Bạn cần nhanh chóng chiến thắng trước
+                                    khi hết thời gian.</p>
+                            </li>
+                        </ol>
+                    </ul>
+                </div>
+            </div>
+            <button id="btn__popup__help">Hiển thị thông tin</button>
         </div>
     </div>
 
@@ -61,4 +119,5 @@
 
 </body>
 <script src="app.js"></script>
+
 </html>
