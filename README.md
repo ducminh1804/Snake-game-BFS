@@ -1,4 +1,5 @@
 # 🐍 Game Rắn Săn Mồi – Frontend Project
+🎥 [Xem video demo tại đây](https://www.youtube.com/watch?v=hk8dAxKvGuM)
 
 **Môn học:** Lập trình Frontend  
 **MSSV:** 21130447  
