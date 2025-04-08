@@ -1,3 +1,8 @@
+Project môn học: Lập trình Frontend
+21130447 - Võ Đức Minh
+Đề tài: game Rắn Săn Mồi
+
+Mô tả:
 Cấp độ 1: Core gameplay với di chuyển, ăn mồi, tăng trưởng kích thước snake trong không gian giới hạn.
 
 Cấp độ 2: Phát hiện va chạm với biên canvas, kết thúc game khi có va chạm.
