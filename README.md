@@ -1,20 +1,63 @@
-Project môn học: Lập trình Frontend
-21130447 - Võ Đức Minh
-Đề tài: game Rắn Săn Mồi
+# 🐍 Game Rắn Săn Mồi – Frontend Project
 
-Mô tả:
-Cấp độ 1: Core gameplay với di chuyển, ăn mồi, tăng trưởng kích thước snake trong không gian giới hạn.
+**Môn học:** Lập trình Frontend  
+**MSSV:** 21130447  
+**Họ tên:** Võ Đức Minh  
+**Đề tài:** Game Rắn Săn Mồi  
 
-Cấp độ 2: Phát hiện va chạm với biên canvas, kết thúc game khi có va chạm.
+---
 
-Cấp độ 3: Thức ăn di chuyển ngẫu nhiên, tăng độ khó.
+## 🎮 Mô tả cấp độ phát triển
 
-Cấp độ 4 & 5: Thêm chướng ngại vật tĩnh được tạo ngẫu nhiên, yêu cầu tránh né.
+### 🧩 Cấp độ 1: Core Gameplay
+- Điều khiển rắn di chuyển trong không gian canvas.
+- Khi rắn ăn mồi, kích thước sẽ tăng lên.
+- Không gian giới hạn rắn trong một lưới cố định.
 
-Cấp độ 6: Tích hợp AI opponent sử dụng thuật toán BFS để tìm và cạnh tranh thức ăn.
+### 💥 Cấp độ 2: Phát hiện va chạm
+- Kiểm tra va chạm giữa đầu rắn và biên canvas.
+- Kết thúc trò chơi nếu xảy ra va chạm.
 
-Kiến trúc: Code tổ chức hướng đối tượng (class Snake, Node, SnakeAI).
+### 🌀 Cấp độ 3: Thức ăn động
+- Thức ăn di chuyển ngẫu nhiên sau mỗi khoảng thời gian.
+- Tăng độ khó cho người chơi.
 
-Lưu trữ: Sử dụng Local Storage cho tùy chọn tốc độ và cấp độ.
+### 🧱 Cấp độ 4 & 5: Chướng ngại vật
+- Tạo ra các chướng ngại vật tĩnh xuất hiện ngẫu nhiên.
+- Người chơi phải điều khiển rắn tránh va chạm với vật cản.
 
-UI: Time bar tăng thử thách ở cấp độ cao.
+### 🤖 Cấp độ 6: Tích hợp AI đối thủ
+- Sử dụng thuật toán **BFS (Breadth-First Search)** để điều khiển AI.
+- AI cạnh tranh với người chơi trong việc thu thập thức ăn.
+
+---
+
+## 🏗️ Kiến trúc hệ thống
+
+- **Hướng đối tượng**:
+  - `Snake`: Quản lý rắn người chơi.
+  - `Node`: Đại diện cho mỗi ô trong lưới canvas.
+  - `SnakeAI`: Rắn do AI điều khiển sử dụng BFS để tìm đường.
+
+---
+
+## 💾 Lưu trữ dữ liệu
+
+- Sử dụng **Local Storage** để lưu:
+  - Tùy chọn tốc độ chơi
+  - Cấp độ người chơi đạt được
+
+---
+
+## 🎨 Giao diện người dùng (UI)
+
+- Thanh **Time Bar** hiển thị thời gian và tăng áp lực ở các cấp độ cao.
+- Giao diện canvas đơn giản, rõ ràng, dễ thao tác.
+
+---
+
+## 🚀 Hướng dẫn chạy project
+
+1. Clone repository:
+   ```bash
+   git clone https://github.com/ducminh1804/Snake-game-BFS
