@@ -10,6 +10,8 @@
 
 ---
 
+<img src="https://res.cloudinary.com/dpgnm1bdi/image/upload/v1744130209/snake_j2pkwa.png" alt="Mô tả ảnh" />
+
 ## 🎮 Mô tả cấp độ phát triển
 
 ### 🧩 Cấp độ 1: Core Gameplay
