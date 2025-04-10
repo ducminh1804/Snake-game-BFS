@@ -1,4 +1,4 @@
-# 🐍 Game Rắn Săn Mồi – Frontend Project
+# 🐍 Game Rắn Săn Mồi Sử Dụng Thuật Toán BFS – Frontend Project
 <h2 align="center">
   📺 <a href="https://www.youtube.com/watch?v=hk8dAxKvGuM" target="_blank">Xem video demo trên <img src="https://img.shields.io/badge/YouTube-red?style=flat&logo=youtube&logoColor=white" alt="YouTube"> tại đây</a>
 </h2>
